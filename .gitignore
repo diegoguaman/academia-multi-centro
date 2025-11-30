@@ -32,7 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
-# Variables de entorno - ESTO es lo que debes tener
+# Variables de entorno
 .env
 .env.*
 .env.local
