@@ -1,3 +1,31 @@
+quiero que leas @Plan-7-dias.md la db ya la tengo funcionadno en Supabase DB_SUPABASE=postgresql://postgres:Ac4d3m1a_1994!@db.wjbbuiiskercelchtaqg.supabase.co:5432/postgres
+@academy-enterprise.sql tiene todas las tablas que tengo en la db y las relaciones
+esto tengo en mi .env ahora quiero que me ayudes a completar el segundo día, ya tengo la estructura inicial aqui en @academymanagerpara completar el día 2 que es tener las entidades, repositories y losr services 
+
+Con respecto a la arquitectura por ahora la mejore seria por capas, no? seria mejor otra, lo que quiero es dejarla la aplicacion para presentarme a la empresa innoqa low code y sera enfocado a dejarlo todo en una imagen de docker conectando con la db de supabase 
+
+por eso elije la arquitectura que mejor represente mi mentalidad de querer trabajar en un proyecto real y serio 
+por ahora quiero completar el dia 2 y dejar los servicios 
+toma las decisiones enfocado en enseñarme lo que es un proyecto empresarial serio y eficiente
+
+No se cuando seria  mejor agregar CI/CD, quiero que me lo digas
+2.	POM con dependencias + LOMBOK + MAPSTRUCT + DOMINIO + REPOSITORY + SERVICES + CRUD básico
+a.	Descargar dependencias
+b.	Generar el dominio de cada una de las entidades principales omitir las que se puedan generar manualmente como comunidad autónoma
+c.	Crear repositorio
+d.	Crear dtos y mapeos
+e.	Crear servicios
+f.	Pruebas unitarias y de integración con un converage de ~95%
+
+ayudame a completar esta tarea con esa covertura, si es mucho quiero que dividas la tarea en commits atomicos para poder enseñar a la gente el proceso de como contruir una proyecto que las empresas tomen en cuenta
+
+
+
+
+
+
+
+
 Plan Detallado para Desarrollar y Desplegar la Aplicación de Academia Multi-Centro en 7 Días
 A continuación, te presento un plan estructurado y detallado para completar el proyecto en una semana, basado en los puntos que has descrito. La aplicación será una plataforma para gestionar una academia multi-centro, con funcionalidades como gestión de usuarios (alumnos, profesores, admins), cursos, convocatorias, matrículas, descuentos automáticos por discapacidad, facturación y subvenciones. Usaremos Java 17+ con Spring Boot 3.x como framework principal, PostgreSQL como base de datos, y herramientas modernas para contenedores y orquestación.
 El plan está diseñado para ser progresivo: cada día construye sobre el anterior, con hitos verificables. Para cada día, incluyo:

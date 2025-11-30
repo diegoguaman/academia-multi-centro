@@ -31,6 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
-.env*/
-.acadeemy-enterprise.sql
-.fill-academy-db.sql
+
+# Variables de entorno - ESTO es lo que debes tener
+.env
+.env.*
+.env.local
+.env.*.local
+
+# Solo permitimos subir ejemplos
+!.env.example
+!.env.sample
+
+academy-enterprise.sql
+fill-academy-db.sql
