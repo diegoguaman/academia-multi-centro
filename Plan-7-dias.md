@@ -1,23 +1,12 @@
-quiero que leas @Plan-7-dias.md la db ya la tengo funcionadno en Supabase DB_SUPABASE=postgresql://postgres:Ac4d3m1a_1994!@db.wjbbuiiskercelchtaqg.supabase.co:5432/postgres
-@academy-enterprise.sql tiene todas las tablas que tengo en la db y las relaciones
-esto tengo en mi .env ahora quiero que me ayudes a completar el segundo día, ya tengo la estructura inicial aqui en @academymanagerpara completar el día 2 que es tener las entidades, repositories y losr services 
-
-Con respecto a la arquitectura por ahora la mejore seria por capas, no? seria mejor otra, lo que quiero es dejarla la aplicacion para presentarme a la empresa innoqa low code y sera enfocado a dejarlo todo en una imagen de docker conectando con la db de supabase 
-
-por eso elije la arquitectura que mejor represente mi mentalidad de querer trabajar en un proyecto real y serio 
-por ahora quiero completar el dia 2 y dejar los servicios 
-toma las decisiones enfocado en enseñarme lo que es un proyecto empresarial serio y eficiente
-
-No se cuando seria  mejor agregar CI/CD, quiero que me lo digas
-2.	POM con dependencias + LOMBOK + MAPSTRUCT + DOMINIO + REPOSITORY + SERVICES + CRUD básico
-a.	Descargar dependencias
-b.	Generar el dominio de cada una de las entidades principales omitir las que se puedan generar manualmente como comunidad autónoma
-c.	Crear repositorio
-d.	Crear dtos y mapeos
-e.	Crear servicios
-f.	Pruebas unitarias y de integración con un converage de ~95%
-
-ayudame a completar esta tarea con esa covertura, si es mucho quiero que dividas la tarea en commits atomicos para poder enseñar a la gente el proceso de como contruir una proyecto que las empresas tomen en cuenta
+Commit 1: ""
+Commit 2: ""
+Commit 3: ""
+Commit 4: ""
+Commit 5: ""
+Commit 6: ""
+Commit 7: ""
+Commit 8: ""
+Commit 9: ""
 
 
 
@@ -102,6 +91,10 @@ Event-Driven: Con Kafka/RabbitMQ para async. Pros: Resiliente. Contras: Compleji
 Serverless: Con AWS Lambda/Spring Cloud Function. Pros: Auto-escala. Contras: Cold starts.
 Recomendada para tu app multi-centro: Hexagonal. Pros: Aísla lógica de negocio (e.g., descuentos) de DB/externos, ideal para multi-centro (adapta adapters por centro). Contras: Más código inicial, pero escalable. Implementa: Interfaces Ports (e.g., MatriculaPort para repo), Adapters (impl JPA).
 
+Agregar CI/CD y Github Actions com
+- Build y tests en cada push
+- Verificación de cobertura con JaCoCo
+- Docker build automático
 
 Explicaciones para entrevistas y posts en LinkedIn:
 "Para mi app de academia, usé Spring Boot con arquitectura hexagonal para decoupling: el core domain (entidades con Lombok para getters/setters auto-generados) se conecta via ports a adapters JPA, permitiendo swap DB sin tocar negocio. MapStruct maneja DTO-entity mapping eficientemente (genera código en compile-time, evitando reflection overhead como en ModelMapper). En entrevistas para INNOQA, explico: 'Elegí hexagonal sobre monolítica por escalabilidad en multi-centro – pros: modularidad; contras: curva aprendizaje, pero reduce debt técnico'. Esto cubre mi gap en Java. LinkedIn post: '¡Arquitectura clean en Spring Boot! De monolito a hexagonal para academias escalables. #SpringBoot #Java #CleanArchitecture'."
