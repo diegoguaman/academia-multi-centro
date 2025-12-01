@@ -24,7 +24,10 @@ public interface ConvocatoriaMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     Convocatoria toEntity(ConvocatoriaRequestDto dto);
+    @Mapping(target = "idCurso", source = "curso.idCurso")
     @Mapping(target = "nombreCurso", source = "curso.nombre")
+    @Mapping(target = "idProfesor", source = "profesor.idUsuario")
+    @Mapping(target = "idCentro", source = "centro.idCentro")
     @Mapping(target = "nombreCentro", source = "centro.nombre")
     ConvocatoriaResponseDto toResponseDto(Convocatoria entity);
     @Mapping(target = "idConvocatoria", ignore = true)

@@ -22,6 +22,7 @@ public interface FacturaMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     Factura toEntity(FacturaRequestDto dto);
+    @Mapping(target = "idMatricula", source = "matricula.idMatricula")
     FacturaResponseDto toResponseDto(Factura entity);
     @Mapping(target = "idFactura", ignore = true)
     @Mapping(target = "matricula", ignore = true)

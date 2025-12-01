@@ -30,8 +30,12 @@ public interface MatriculaMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     Matricula toEntity(MatriculaRequestDto dto);
+    @Mapping(target = "idConvocatoria", source = "convocatoria.idConvocatoria")
     @Mapping(target = "codigoConvocatoria", source = "convocatoria.codigo")
+    @Mapping(target = "idAlumno", source = "alumno.idUsuario")
     @Mapping(target = "nombreAlumno", expression = "java(entity.getAlumno().getDatosPersonales() != null ? entity.getAlumno().getDatosPersonales().getNombre() + \" \" + entity.getAlumno().getDatosPersonales().getApellidos() : null)")
+    @Mapping(target = "idEntidadSubvencionadora", source = "entidadSubvencionadora.idEntidad")
+    @Mapping(target = "estadoPago", source = "estadoPago")
     MatriculaResponseDto toResponseDto(Matricula entity);
     @Mapping(target = "idMatricula", ignore = true)
     @Mapping(target = "convocatoria", ignore = true)

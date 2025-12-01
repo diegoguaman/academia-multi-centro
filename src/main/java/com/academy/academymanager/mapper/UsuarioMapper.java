@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
     UsuarioMapper INSTANCE = Mappers.getMapper(UsuarioMapper.class);
+    @Mapping(target = "idUsuario", ignore = true)
     @Mapping(target = "passwordHash", ignore = true)
     @Mapping(target = "datosPersonales", ignore = true)
     @Mapping(target = "fechaCreacion", ignore = true)

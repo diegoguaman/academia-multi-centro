@@ -21,6 +21,7 @@ public interface CalificacionMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     Calificacion toEntity(CalificacionRequestDto dto);
+    @Mapping(target = "idMatricula", source = "matricula.idMatricula")
     CalificacionResponseDto toResponseDto(Calificacion entity);
     @Mapping(target = "idCalificacion", ignore = true)
     @Mapping(target = "matricula", ignore = true)

@@ -23,7 +23,9 @@ public interface CentroMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     Centro toEntity(CentroRequestDto dto);
+    @Mapping(target = "idEmpresa", source = "empresa.idEmpresa")
     @Mapping(target = "nombreEmpresa", source = "empresa.nombreLegal")
+    @Mapping(target = "idComunidad", source = "comunidad.idComunidad")
     @Mapping(target = "nombreComunidad", source = "comunidad.nombre")
     CentroResponseDto toResponseDto(Centro entity);
     @Mapping(target = "idCentro", ignore = true)

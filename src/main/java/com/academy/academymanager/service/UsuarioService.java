@@ -6,7 +6,6 @@ import com.academy.academymanager.dto.response.UsuarioResponseDto;
 import com.academy.academymanager.mapper.UsuarioMapper;
 import com.academy.academymanager.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

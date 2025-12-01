@@ -23,7 +23,9 @@ public interface CursoMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     Curso toEntity(CursoRequestDto dto);
+    @Mapping(target = "idMateria", source = "materia.idMateria")
     @Mapping(target = "nombreMateria", source = "materia.nombre")
+    @Mapping(target = "idFormato", source = "formato.idFormato")
     @Mapping(target = "nombreFormato", source = "formato.nombre")
     CursoResponseDto toResponseDto(Curso entity);
     @Mapping(target = "idCurso", ignore = true)
