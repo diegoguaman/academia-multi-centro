@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,6 +86,12 @@ public class AuthService {
                     .nombre(nombreCompleto)
                     .build();
         } catch (BadCredentialsException e) {
+            // Re-throw BadCredentialsException from authentication manager
+            throw new BadCredentialsException("Invalid email or password");
+        } catch (UsernameNotFoundException e) {
+            // Handle case when user is not found or account is disabled
+            // This can happen when loadUserByUsername is called after authentication
+            // but user was disabled between authentication and user details loading
             throw new BadCredentialsException("Invalid email or password");
         }
     }

@@ -92,7 +92,7 @@ public class JwtService {
     /**
      * Validates token against user details.
      * Checks:
-     * 1. Username matches
+     * 1. Username matches (null-safe comparison)
      * 2. Token not expired
      * 
      * @param token JWT token
@@ -101,7 +101,11 @@ public class JwtService {
      */
     public boolean isTokenValid(final String token, final UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        // Null-safe check: if username is null, token is invalid
+        if (username == null) {
+            return false;
+        }
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
     /**
      * Checks if token is expired.

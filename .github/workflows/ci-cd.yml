@@ -264,11 +264,12 @@ jobs:
         run: echo "Deployed to production environment"
 
   # Job 7: Post-deployment tests
-  smoke-tests:
-    name: Smoke Tests
+  # Separate jobs for staging and production to handle conditional dependencies
+  smoke-tests-staging:
+    name: Smoke Tests (Staging)
     runs-on: ubuntu-latest
     needs: [deploy-staging]
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/develop'
     
     steps:
       - name: Checkout code
@@ -276,7 +277,7 @@ jobs:
       
       - name: Run smoke tests
         run: |
-          echo "Running smoke tests against deployed environment"
+          echo "Running smoke tests against staging environment"
           # Add actual smoke test commands here
           # Example: curl health endpoint, run basic API tests
       
@@ -284,7 +285,29 @@ jobs:
         run: |
           # Replace with your actual health endpoint
           # curl -f https://staging.academia.example.com/actuator/health || exit 1
-          echo "Health check passed"
+          echo "Staging health check passed"
+
+  smoke-tests-production:
+    name: Smoke Tests (Production)
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run smoke tests
+        run: |
+          echo "Running smoke tests against production environment"
+          # Add actual smoke test commands here
+          # Example: curl health endpoint, run basic API tests
+      
+      - name: Health check
+        run: |
+          # Replace with your actual health endpoint
+          # curl -f https://academia.example.com/actuator/health || exit 1
+          echo "Production health check passed"
 
   # Job 8: Performance Tests (optional)
   performance-tests:
