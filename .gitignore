@@ -27,7 +27,6 @@ target/
 /.nb-gradle/
 build/
 !**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
@@ -41,6 +40,15 @@ build/
 # Solo permitimos subir ejemplos
 !.env.example
 !.env.sample
+
+# Application properties con datos sensibles (solo desarrollo)
+application-dev.properties
+application-local.properties
+application-*.local.properties
+
+# Scripts de desarrollo (pueden contener passwords)
+start-dev.ps1
+start-dev.sh
 
 academy-enterprise.sql
 fill-academy-db.sql
