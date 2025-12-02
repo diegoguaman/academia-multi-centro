@@ -113,7 +113,13 @@ public class JwtService {
      * @return true if expired
      */
     private boolean isTokenExpired(final String token) {
-        return extractExpiration(token).before(new Date());
+        try {
+            return extractExpiration(token).before(new Date());
+        } catch (JwtException e) {
+            // Token inválido (malformed, invalid signature, etc.) = considerado no válido
+            // Retornar true hace que isTokenValid() retorne false
+            return true;
+        }
     }
     /**
      * Extracts expiration date from token.
