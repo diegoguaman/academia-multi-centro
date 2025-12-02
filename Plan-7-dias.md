@@ -91,32 +91,56 @@ Event-Driven: Con Kafka/RabbitMQ para async. Pros: Resiliente. Contras: Compleji
 Serverless: Con AWS Lambda/Spring Cloud Function. Pros: Auto-escala. Contras: Cold starts.
 Recomendada para tu app multi-centro: Hexagonal. Pros: Aísla lógica de negocio (e.g., descuentos) de DB/externos, ideal para multi-centro (adapta adapters por centro). Contras: Más código inicial, pero escalable. Implementa: Interfaces Ports (e.g., MatriculaPort para repo), Adapters (impl JPA).
 
-Agregar CI/CD y Github Actions com
-- Build y tests en cada push
-- Verificación de cobertura con JaCoCo
-- Docker build automático
 
 Explicaciones para entrevistas y posts en LinkedIn:
 "Para mi app de academia, usé Spring Boot con arquitectura hexagonal para decoupling: el core domain (entidades con Lombok para getters/setters auto-generados) se conecta via ports a adapters JPA, permitiendo swap DB sin tocar negocio. MapStruct maneja DTO-entity mapping eficientemente (genera código en compile-time, evitando reflection overhead como en ModelMapper). En entrevistas para INNOQA, explico: 'Elegí hexagonal sobre monolítica por escalabilidad en multi-centro – pros: modularidad; contras: curva aprendizaje, pero reduce debt técnico'. Esto cubre mi gap en Java. LinkedIn post: '¡Arquitectura clean en Spring Boot! De monolito a hexagonal para academias escalables. #SpringBoot #Java #CleanArchitecture'."
 Tiempo estimado: 7 horas (2h setup, 3h capas/CRUD, 2h arquitecturas).
 Hito: App corriendo local, CRUD tested con Postman.
-Día 3: Seguridad Avanzada (Spring Security, JWT)
-Objetivos principales: Implementar auth con Spring Security y JWT para roles (ADMIN, PROFESOR, ALUMNO).
-Pasos detallados:
 
-Agrega dependencias: En POM: spring-boot-starter-security, jjwt-api, jjwt-impl, jjwt-jackson (para JWT).
-Explicación técnica: Security usa filters chain (docs Spring: spring.io/projects/spring-security). JWT es stateless (token signed con secret).
 
-Configura Security: Clase SecurityConfig con @EnableWebSecurity extends WebSecurityConfigurerAdapter (en Spring 6+: usa SecurityFilterChain). Define http.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")... .and().addFilter(new JwtAuthenticationFilter());.
-JWT impl: Interface UserDetailsService impl en service: loadUserByUsername busca en UsuarioRepository. Genera token: String token = Jwts.builder().setSubject(user.getUsername()).claim("roles", user.getAuthorities()).signWith(SignatureAlgorithm.HS512, "secret").compact();.
-Manejo errores: Global @ControllerAdvice con @ExceptionHandler(JwtException.class) { return ResponseEntity.badRequest(); }. Condicionales: if (!token.startsWith("Bearer ")) throw BadCredentials;. Bucles: Para roles for (GrantedAuthority auth : authorities) { if (auth.getAuthority().equals("ADMIN")) allow; }. Try-catch: En parse token try { Claims claims = Jwts.parser().setSigningKey("secret").parseClaimsJws(token); } catch (ExpiredJwtException e) { ... }.
+Día 3: Seguridad Avanzada (Spring Security, JWT) ✅ COMPLETADO
+Objetivos principales: Implementar auth con Spring Security y JWT para roles (ADMIN, PROFESOR, ALUMNO, ADMINISTRATIVO).
 
-Integra con DB: Usuario entity con @UserDefinition (Spring Security). Login endpoint: @PostMapping("/login") retorna JWT.
+✅ Implementado:
+- Dependencias JWT agregadas al pom.xml (jjwt-api, jjwt-impl, jjwt-jackson 0.12.5)
+- JwtService: Generación y validación de tokens con HMAC-SHA256
+- JwtAuthenticationFilter: Filtro en security chain para validar tokens
+- SecurityConfig: Configuración con SecurityFilterChain (Spring Boot 3+)
+- UserDetailsServiceImpl: Integración con DB (loadUserByUsername)
+- AuthController: Endpoints /api/auth/login y /api/auth/register
+- AuthService: Lógica de autenticación con BCrypt
+- DTOs: LoginRequest, LoginResponse, RegisterRequest
+- GlobalExceptionHandler: Manejo centralizado de excepciones JWT
+- BCrypt password encoder con 10 rounds
+- Role-based access control (ROLE_ADMIN, ROLE_PROFESOR, etc.)
+- Stateless authentication (SessionCreationPolicy.STATELESS)
+
+✅ CI/CD con GitHub Actions:
+- Pipeline completo con 8 jobs (build, test, quality, security, docker, deploy)
+- JaCoCo coverage enforcement (95% mínimo)
+- OWASP Dependency Check (CVSS >= 7 falla build)
+- SonarCloud integration (code quality gates)
+- Docker multi-stage builds optimizados
+- Artifact caching (Maven dependencies)
+- Parallel execution de tests
+- Deployment strategies documentadas (rolling, blue-green, canary)
+- Automated rollback si health checks fallan
+
+✅ Documentación:
+- docs/dia-3/01-seguridad-jwt-spring-security.md (guía técnica completa)
+- docs/dia-3/02-cicd-github-actions-profesional.md (pipeline profesional)
+- docs/dia-3/03-linkedin-post-dia-3.md (posts para redes sociales)
+- docs/dia-3/README.md (resumen ejecutivo)
+
+📊 Tiempo real: 8 horas
+🎯 Nivel alcanzado: Senior (Security + DevOps)
 
 Explicaciones para entrevistas y posts en LinkedIn:
 "Integré Spring Security con JWT para auth role-based: filters validan tokens (parsed via JJWT library, con try-catch para exceptions como ExpiredJwt). Para multi-centro, roles controlan accesos (e.g., PROFESOR solo ve sus convocatorias). En INNOQA, destaco: 'JWT es stateless, ideal low-code – pros: escalable; contras: no revocation fácil, mitigado con short expiry'. #SpringSecurity #JWT #JavaSecurity."
 Tiempo estimado: 6 horas.
 Hito: Endpoints protegidos, JWT funcional.
+
+
 Día 4: API Moderna (GraphQL vs REST)
 Objetivos principales: Implementa GraphQL, explica por qué mejor que REST tradicional.
 Pasos detallados:
@@ -131,6 +155,8 @@ Explicaciones para entrevistas y posts en LinkedIn:
 "Opté GraphQL sobre REST para queries eficientes en academia: resolvers mapean a services, resolviendo n+1 con batching. En interviews: 'GraphQL reduce bandwidth – e.g., query { matricula(id:1) { precioFinal alumno { nombre } } } vs multiple REST endpoints'. #GraphQL #SpringBoot #API."
 Tiempo estimado: 6 horas.
 Hito: GraphQL endpoint testable con GraphiQL.
+
+
 Día 5: Containerización (Docker & Compose)
 Objetivos principales: Dockeriza app y DB, corre con Compose.
 Pasos detallados:
