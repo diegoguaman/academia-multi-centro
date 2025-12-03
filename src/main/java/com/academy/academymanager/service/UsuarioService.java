@@ -42,6 +42,12 @@ public class UsuarioService {
                 .map(usuarioMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+    @Transactional(readOnly = true)
+    public List<UsuarioResponseDto> findByRol(Usuario.Rol rol) {
+        return usuarioRepository.findByRol(rol).stream()
+                .map(usuarioMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
     public UsuarioResponseDto update(Long id, UsuarioRequestDto requestDto) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario not found with id: " + id));
