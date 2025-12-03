@@ -1,0 +1,209 @@
+# Schema Definition (REQUIRED for GraphiQL)
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    # Matrícula queries
+    matricula(id: ID!): Matricula
+    matriculas(estadoPago: EstadoPago, idAlumno: ID): [Matricula!]!
+    
+    # Curso queries
+    curso(id: ID!): Curso
+    cursos(activo: Boolean): [Curso!]!
+    
+    # Usuario queries
+    usuario(id: ID!): Usuario
+    usuarios(rol: Rol): [Usuario!]!
+    
+    # Convocatoria queries
+    convocatoria(id: ID!): Convocatoria
+    convocatorias(activo: Boolean, idCentro: ID): [Convocatoria!]!
+}
+
+type Mutation {
+    # Matrícula mutations
+    createMatricula(input: MatriculaInput!): Matricula!
+    updateMatricula(id: ID!, input: MatriculaInput!): Matricula!
+    deleteMatricula(id: ID!): Boolean!
+    
+    # Curso mutations
+    createCurso(input: CursoInput!): Curso!
+    updateCurso(id: ID!, input: CursoInput!): Curso!
+    deleteCurso(id: ID!): Boolean!
+}
+
+# Scalars
+scalar DateTime
+scalar BigDecimal
+
+# Enums
+enum EstadoPago {
+    PENDIENTE
+    PAGADO
+    CANCELADO
+}
+
+enum Rol {
+    ADMIN
+    PROFESOR
+    ALUMNO
+    ADMINISTRATIVO
+}
+
+# Types
+type Matricula {
+    idMatricula: ID!
+    codigo: String!
+    fechaMatricula: DateTime!
+    precioBruto: BigDecimal!
+    descuentoAplicado: BigDecimal!
+    motivoDescuento: String
+    importeSubvencionado: BigDecimal!
+    precioFinal: BigDecimal!
+    estadoPago: EstadoPago!
+    fechaCreacion: DateTime!
+    fechaModificacion: DateTime
+    # Relations
+    convocatoria: Convocatoria!
+    alumno: Usuario!
+    entidadSubvencionadora: EntidadSubvencionadora
+    calificaciones: [Calificacion!]!
+    facturas: [Factura!]!
+}
+
+type Curso {
+    idCurso: ID!
+    nombre: String!
+    precioBase: BigDecimal!
+    duracionHoras: Int
+    activo: Boolean!
+    fechaCreacion: DateTime!
+    fechaModificacion: DateTime
+    # Relations
+    materia: Materia!
+    formato: Formato!
+    convocatorias: [Convocatoria!]!
+}
+
+type Convocatoria {
+    idConvocatoria: ID!
+    codigo: String!
+    fechaInicio: String!
+    fechaFin: String!
+    activo: Boolean!
+    fechaCreacion: DateTime!
+    fechaModificacion: DateTime
+    # Relations
+    curso: Curso!
+    profesor: Usuario!
+    centro: Centro!
+    matriculas: [Matricula!]!
+}
+
+type Usuario {
+    idUsuario: ID!
+    email: String!
+    rol: Rol!
+    activo: Boolean!
+    fechaCreacion: DateTime!
+    # Relations
+    datosPersonales: DatosPersonales
+}
+
+type DatosPersonales {
+    idDatosPersonales: ID!
+    nombre: String!
+    apellidos: String!
+    dni: String
+    telefono: String
+    direccion: String
+    discapacidadPorcentaje: BigDecimal
+}
+
+type Materia {
+    idMateria: ID!
+    nombre: String!
+    descripcion: String
+    activo: Boolean!
+}
+
+type Formato {
+    idFormato: ID!
+    nombre: String!
+    descripcion: String
+    activo: Boolean!
+}
+
+type Centro {
+    idCentro: ID!
+    codigoCentro: String!
+    nombre: String!
+    capacidadMaxima: Int
+    activo: Boolean!
+    # Relations
+    empresa: Empresa!
+    comunidad: Comunidad!
+}
+
+type Empresa {
+    idEmpresa: ID!
+    cif: String!
+    nombreLegal: String!
+    direccionFiscal: String
+    activo: Boolean!
+}
+
+type Comunidad {
+    idComunidad: ID!
+    codigo: String!
+    nombre: String!
+    capital: String
+    activo: Boolean!
+}
+
+type EntidadSubvencionadora {
+    idEntidadSubvencionadora: ID!
+    nombre: String!
+    codigo: String
+    activo: Boolean!
+}
+
+type Calificacion {
+    idCalificacion: ID!
+    nota: BigDecimal!
+    fechaCalificacion: DateTime!
+    observaciones: String
+    # Relations
+    matricula: Matricula!
+    materia: Materia!
+}
+
+type Factura {
+    idFactura: ID!
+    numeroFactura: String!
+    fechaEmision: DateTime!
+    importeTotal: BigDecimal!
+    estado: String!
+    # Relations
+    matricula: Matricula!
+}
+
+# Input Types
+input MatriculaInput {
+    idConvocatoria: ID!
+    idAlumno: ID!
+    idEntidadSubvencionadora: ID
+    importeSubvencionado: BigDecimal
+}
+
+input CursoInput {
+    nombre: String!
+    idMateria: ID!
+    idFormato: ID!
+    precioBase: BigDecimal!
+    duracionHoras: Int
+    activo: Boolean
+}
+
