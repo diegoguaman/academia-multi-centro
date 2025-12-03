@@ -18,6 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 /**
  * Spring Security Configuration for JWT-based authentication.
@@ -29,8 +34,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * - BCrypt for password hashing
  * 
  * Technical Details:
- * - SecurityFilterChain replaces deprecated WebSecurityConfigurerAdapter (Spring Security 6+)
- * - Filter chain: JwtAuthenticationFilter -> UsernamePasswordAuthenticationFilter
+ * - SecurityFilterChain replaces deprecated WebSecurityConfigurerAdapter
+ * (Spring Security 6+)
+ * - Filter chain: JwtAuthenticationFilter ->
+ * UsernamePasswordAuthenticationFilter
  * - CORS enabled for frontend integration
  * - CSRF disabled (stateless JWT doesn't need CSRF protection)
  * 
@@ -52,6 +59,44 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
+
+    /**
+     * Configures CORS (Cross-Origin Resource Sharing) for GraphQL and API endpoints.
+     * 
+     * This is CRITICAL for GraphiQL to work, as it needs to load resources
+     * and make requests from the browser to the server.
+     * 
+     * @return CORS configuration source
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        // Allow localhost origins (development)
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "http://localhost:8080",
+                "http://localhost:5173"
+        ));
+        
+        // Allow all HTTP methods
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        
+        // Allow all headers (important for JWT and GraphQL)
+        configuration.setAllowedHeaders(List.of("*"));
+        
+        // Allow credentials (cookies, authorization headers)
+        configuration.setAllowCredentials(true);
+        
+        // Cache preflight requests for 1 hour
+        configuration.setMaxAge(3600L);
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Apply CORS configuration to all routes
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     /**
      * Configures HTTP security with filter chain.
      * 
@@ -72,12 +117,15 @@ public class SecurityConfig {
      * @return configured SecurityFilterChain
      * @throws Exception if configuration error
      */
+
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/graphql/**", "/graphiql/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/profesor/**").hasAnyRole("PROFESOR", "ADMIN")
                         .requestMatchers("/api/alumno/**").hasAnyRole("ALUMNO", "ADMIN")
@@ -85,17 +133,17 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/cursos/**").hasAnyRole("ALUMNO", "PROFESOR", "ADMIN", "ADMINISTRATIVO")
                         .requestMatchers(HttpMethod.POST, "/api/cursos/**").hasAnyRole("ADMIN", "ADMINISTRATIVO")
                         .requestMatchers("/api/matriculas/**").authenticated()
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
     /**
-     * Configures authentication provider with custom UserDetailsService and password encoder.
+     * Configures authentication provider with custom UserDetailsService and
+     * password encoder.
      * 
      * DaoAuthenticationProvider:
      * - Loads users from database via UserDetailsService
@@ -111,6 +159,7 @@ public class SecurityConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
+
     /**
      * AuthenticationManager bean for manual authentication (e.g., login endpoint).
      * 
@@ -123,6 +172,7 @@ public class SecurityConfig {
             throws Exception {
         return config.getAuthenticationManager();
     }
+
     /**
      * BCrypt password encoder bean.
      * 
@@ -144,4 +194,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-
