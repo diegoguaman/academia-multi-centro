@@ -125,7 +125,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/graphql/**", "/graphiql/**").authenticated()
+                        .requestMatchers("/graphql/**", "/graphiql/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/profesor/**").hasAnyRole("PROFESOR", "ADMIN")
                         .requestMatchers("/api/alumno/**").hasAnyRole("ALUMNO", "ADMIN")
