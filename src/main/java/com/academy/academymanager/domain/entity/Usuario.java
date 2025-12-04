@@ -1,10 +1,12 @@
 package com.academy.academymanager.domain.entity;
 
+import com.academy.academymanager.usertype.PostgreSQLEnumType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 
@@ -27,8 +29,8 @@ public class Usuario {
     private String email;
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
-    @Column(name = "rol", nullable = false, length = 20)
-    @Enumerated(EnumType.STRING)
+    @Column(name = "rol", nullable = false, columnDefinition = "rol_usuario")
+    @Type(PostgreSQLEnumType.class)
     private Rol rol;
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
