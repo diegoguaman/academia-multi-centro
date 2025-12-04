@@ -71,6 +71,12 @@ public class ConvocatoriaService {
                 .map(convocatoriaMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+    @Transactional(readOnly = true)
+    public List<ConvocatoriaResponseDto> findByCentroId(Long idCentro) {
+        return convocatoriaRepository.findByCentroIdCentro(idCentro).stream()
+                .map(convocatoriaMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
     public ConvocatoriaResponseDto update(Long id, ConvocatoriaRequestDto requestDto) {
         Convocatoria convocatoria = convocatoriaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Convocatoria not found with id: " + id));

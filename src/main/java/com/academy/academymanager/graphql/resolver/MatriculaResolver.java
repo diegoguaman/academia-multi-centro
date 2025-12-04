@@ -5,6 +5,7 @@ import com.academy.academymanager.dto.request.MatriculaRequestDto;
 import com.academy.academymanager.dto.response.MatriculaResponseDto;
 import com.academy.academymanager.mapper.MatriculaMapper;
 import com.academy.academymanager.service.MatriculaService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.BatchMapping;
@@ -13,6 +14,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -151,36 +153,14 @@ public class MatriculaResolver {
     // }
     /**
      * Input type for Matricula mutations.
+     * Maps to the MatriculaInput type defined in schema.graphqls.
      */
+    @Data
     public static class MatriculaInput {
         private Long idConvocatoria;
         private Long idAlumno;
         private Long idEntidadSubvencionadora;
-        private java.math.BigDecimal importeSubvencionado;
-        public Long getIdConvocatoria() {
-            return idConvocatoria;
-        }
-        public void setIdConvocatoria(final Long idConvocatoria) {
-            this.idConvocatoria = idConvocatoria;
-        }
-        public Long getIdAlumno() {
-            return idAlumno;
-        }
-        public void setIdAlumno(final Long idAlumno) {
-            this.idAlumno = idAlumno;
-        }
-        public Long getIdEntidadSubvencionadora() {
-            return idEntidadSubvencionadora;
-        }
-        public void setIdEntidadSubvencionadora(final Long idEntidadSubvencionadora) {
-            this.idEntidadSubvencionadora = idEntidadSubvencionadora;
-        }
-        public java.math.BigDecimal getImporteSubvencionado() {
-            return importeSubvencionado;
-        }
-        public void setImporteSubvencionado(final java.math.BigDecimal importeSubvencionado) {
-            this.importeSubvencionado = importeSubvencionado;
-        }
+        private BigDecimal importeSubvencionado;
     }
 }
 

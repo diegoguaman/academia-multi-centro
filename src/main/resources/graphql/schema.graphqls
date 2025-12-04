@@ -20,6 +20,22 @@ type Query {
     # Convocatoria queries
     convocatoria(id: ID!): Convocatoria
     convocatorias(activo: Boolean, idCentro: ID): [Convocatoria!]!
+    
+    # Materia queries
+    materia(id: ID!): Materia
+    materias(activo: Boolean): [Materia!]!
+    
+    # Formato queries
+    formato(id: ID!): Formato
+    formatos: [Formato!]!
+    
+    # Centro queries
+    centro(id: ID!): Centro
+    centros(activo: Boolean): [Centro!]!
+    
+    # Empresa queries
+    empresa(id: ID!): Empresa
+    empresas: [Empresa!]!
 }
 
 type Mutation {
@@ -32,6 +48,36 @@ type Mutation {
     createCurso(input: CursoInput!): Curso!
     updateCurso(id: ID!, input: CursoInput!): Curso!
     deleteCurso(id: ID!): Boolean!
+    
+    # Convocatoria mutations
+    createConvocatoria(input: ConvocatoriaInput!): Convocatoria!
+    updateConvocatoria(id: ID!, input: ConvocatoriaInput!): Convocatoria!
+    deleteConvocatoria(id: ID!): Boolean!
+    
+    # Usuario mutations
+    createUsuario(input: UsuarioInput!): Usuario!
+    updateUsuario(id: ID!, input: UsuarioInput!): Usuario!
+    deleteUsuario(id: ID!): Boolean!
+    
+    # Materia mutations
+    createMateria(input: MateriaInput!): Materia!
+    updateMateria(id: ID!, input: MateriaInput!): Materia!
+    deleteMateria(id: ID!): Boolean!
+    
+    # Formato mutations
+    createFormato(input: FormatoInput!): Formato!
+    updateFormato(id: ID!, input: FormatoInput!): Formato!
+    deleteFormato(id: ID!): Boolean!
+    
+    # Centro mutations
+    createCentro(input: CentroInput!): Centro!
+    updateCentro(id: ID!, input: CentroInput!): Centro!
+    deleteCentro(id: ID!): Boolean!
+    
+    # Empresa mutations
+    createEmpresa(input: EmpresaInput!): Empresa!
+    updateEmpresa(id: ID!, input: EmpresaInput!): Empresa!
+    deleteEmpresa(id: ID!): Boolean!
 }
 
 # Scalars
@@ -204,6 +250,48 @@ input CursoInput {
     idFormato: ID!
     precioBase: BigDecimal!
     duracionHoras: Int
+    activo: Boolean
+}
+
+input ConvocatoriaInput {
+    codigo: String
+    idCurso: ID!
+    idProfesor: ID!
+    idCentro: ID!
+    fechaInicio: String!
+    fechaFin: String!
+    activo: Boolean
+}
+
+input UsuarioInput {
+    email: String!
+    password: String
+    rol: Rol!
+    activo: Boolean
+}
+
+input MateriaInput {
+    nombre: String!
+    activo: Boolean
+}
+
+input FormatoInput {
+    nombre: String!
+}
+
+input CentroInput {
+    codigoCentro: String!
+    nombre: String!
+    idEmpresa: ID!
+    idComunidad: ID!
+    capacidadMaxima: Int
+    activo: Boolean
+}
+
+input EmpresaInput {
+    cif: String!
+    nombreLegal: String!
+    direccionFiscal: String
     activo: Boolean
 }
 

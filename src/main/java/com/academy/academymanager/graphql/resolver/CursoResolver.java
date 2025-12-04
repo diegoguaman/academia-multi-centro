@@ -3,6 +3,7 @@ package com.academy.academymanager.graphql.resolver;
 import com.academy.academymanager.dto.request.CursoRequestDto;
 import com.academy.academymanager.dto.response.CursoResponseDto;
 import com.academy.academymanager.service.CursoService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -10,6 +11,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -122,50 +124,16 @@ public class CursoResolver {
     }
     /**
      * Input type for Curso mutations.
+     * Maps to the CursoInput type defined in schema.graphqls.
      */
+    @Data
     public static class CursoInput {
         private String nombre;
         private Long idMateria;
         private Long idFormato;
-        private java.math.BigDecimal precioBase;
+        private BigDecimal precioBase;
         private Integer duracionHoras;
         private Boolean activo;
-        public String getNombre() {
-            return nombre;
-        }
-        public void setNombre(final String nombre) {
-            this.nombre = nombre;
-        }
-        public Long getIdMateria() {
-            return idMateria;
-        }
-        public void setIdMateria(final Long idMateria) {
-            this.idMateria = idMateria;
-        }
-        public Long getIdFormato() {
-            return idFormato;
-        }
-        public void setIdFormato(final Long idFormato) {
-            this.idFormato = idFormato;
-        }
-        public java.math.BigDecimal getPrecioBase() {
-            return precioBase;
-        }
-        public void setPrecioBase(final java.math.BigDecimal precioBase) {
-            this.precioBase = precioBase;
-        }
-        public Integer getDuracionHoras() {
-            return duracionHoras;
-        }
-        public void setDuracionHoras(final Integer duracionHoras) {
-            this.duracionHoras = duracionHoras;
-        }
-        public Boolean getActivo() {
-            return activo;
-        }
-        public void setActivo(final Boolean activo) {
-            this.activo = activo;
-        }
     }
 }
 

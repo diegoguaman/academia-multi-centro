@@ -1,10 +1,13 @@
 package com.academy.academymanager.graphql.resolver;
 
 import com.academy.academymanager.domain.entity.Usuario;
+import com.academy.academymanager.dto.request.UsuarioRequestDto;
 import com.academy.academymanager.dto.response.UsuarioResponseDto;
 import com.academy.academymanager.service.UsuarioService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -87,6 +90,71 @@ public class UsuarioResolver {
             return usuarioService.findByRol(rol);
         }
         return usuarioService.findAll();
+    }
+    /**
+     * Mutation to create a new usuario.
+     * 
+     * Example GraphQL mutation:
+     * mutation {
+     *   createUsuario(input: {
+     *     email: "nuevo@example.com"
+     *     password: "password123"
+     *     rol: ALUMNO
+     *     activo: true
+     *   }) {
+     *     idUsuario
+     *     email
+     *     rol
+     *   }
+     * }
+     */
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public UsuarioResponseDto createUsuario(@Argument final UsuarioInput input) {
+        UsuarioRequestDto requestDto = UsuarioRequestDto.builder()
+                .email(input.getEmail())
+                .password(input.getPassword())
+                .rol(input.getRol())
+                .activo(input.getActivo() != null ? input.getActivo() : true)
+                .build();
+        return usuarioService.create(requestDto);
+    }
+    /**
+     * Mutation to update an existing usuario.
+     */
+    @MutationMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'ADMINISTRATIVO')")
+    public UsuarioResponseDto updateUsuario(
+            @Argument final Long id,
+            @Argument final UsuarioInput input
+    ) {
+        UsuarioRequestDto requestDto = UsuarioRequestDto.builder()
+                .email(input.getEmail())
+                .password(input.getPassword())
+                .rol(input.getRol())
+                .activo(input.getActivo())
+                .build();
+        return usuarioService.update(id, requestDto);
+    }
+    /**
+     * Mutation to delete a usuario.
+     */
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Boolean deleteUsuario(@Argument final Long id) {
+        usuarioService.delete(id);
+        return true;
+    }
+    /**
+     * Input type for Usuario mutations.
+     * Maps to the UsuarioInput type defined in schema.graphqls.
+     */
+    @Data
+    public static class UsuarioInput {
+        private String email;
+        private String password;
+        private Usuario.Rol rol;
+        private Boolean activo;
     }
 }
 
