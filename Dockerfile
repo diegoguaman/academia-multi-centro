@@ -18,6 +18,9 @@ FROM eclipse-temurin:21-jre-alpine
 LABEL maintainer="academia-multi-centro"
 LABEL description="Academia Multi-Centro Spring Boot Application"
 
+# Install wget for health checks
+RUN apk add --no-cache wget
+
 # Create non-root user for security
 RUN addgroup -S spring && adduser -S spring -G spring
 
@@ -39,9 +42,21 @@ USER spring:spring
 # Expose application port
 EXPOSE 8080
 
-# Health check
+# Health check (requires Spring Boot Actuator)
+# Checks /actuator/health endpoint every 30s
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+
+# Required Environment Variables (must be set at runtime):
+# - DB_SUPABASE: JDBC URL to Supabase (e.g., jdbc:postgresql://host:6543/postgres?sslmode=require)
+# - DB_USERNAME: Database username (e.g., postgres)
+# - DB_PASSWORD: Database password (SECRET - use Kubernetes Secrets or Docker secrets)
+# - JWT_SECRET_KEY: 256-bit secret key for JWT signing (SECRET)
+# - JWT_EXPIRATION_TIME: JWT expiration time in milliseconds (default: 86400000)
+# - SPRING_PROFILES_ACTIVE: Spring profile (recommended: prod for production)
+#
+# Example:
+# docker run -e DB_SUPABASE="..." -e DB_PASSWORD="..." -e JWT_SECRET_KEY="..." ...
 
 # JVM optimization flags
 ENV JAVA_OPTS="-XX:+UseContainerSupport \
