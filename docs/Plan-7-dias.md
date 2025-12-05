@@ -161,22 +161,47 @@ Explicaciones para entrevistas y posts en LinkedIn:
 Hito: GraphQL endpoint implementado, documentación completa, listo para implementar resolvers restantes.
 
 
-Día 5: Containerización (Docker & Compose)
-Objetivos principales: Dockeriza app y DB, corre con Compose.
-Pasos detallados:
+Día 5: Containerización (Docker & Kubernetes) ✅ COMPLETADO
+Objetivos principales: Dockeriza app (sin DB - está en Supabase), prepara para Kubernetes.
 
-Dockerfile:dockerfileFROM openjdk:17-jdk-slim
-COPY target/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]Build: mvn package; docker build -t academia-app .
-Compose: docker-compose.yml con services: app (puerto 8080), postgres (volumenes para data).
-Explicación técnica: Compose orquesta contenedores (docs Docker: docker.com/docs). Volúmenes persisten DB: volumes: - db-data:/var/lib/postgresql/data. Try-catch no aplica, pero en Java maneja conexiones fallidas.
+✅ Implementado:
+- Dockerfile multi-stage optimizado (reducción 75% de tamaño: 800MB → 200MB)
+- Usuario no-root para seguridad
+- Health checks configurados para Kubernetes probes
+- JVM optimizado para contenedores (UseContainerSupport, MaxRAMPercentage)
+- Variables de entorno documentadas y estructuradas
+- Gestión de secrets (K8s Secrets, External Secrets Operator, Sealed Secrets)
+- Manifests de Kubernetes (Deployment, Service, Secrets, ConfigMap)
+- Documentación completa de dockerización
 
-Corre local: docker-compose up, verifica en contenedor con docker exec.
+✅ Documentación:
+- docs/dia-5/01-analisis-dockerizacion-completo.md (análisis técnico completo)
+- docs/dia-5/02-variables-entorno-docker-kubernetes.md (guía de variables críticas)
+- docs/dia-5/03-preguntas-entrevistas-docker-kubernetes.md (13+ preguntas nivel medio/alto)
+- docs/dia-5/04-linkedin-post-dia-5.md (5 opciones de posts)
+- docs/dia-5/README.md (resumen ejecutivo)
+
+📊 Variables de Entorno Críticas:
+- DB_SUPABASE, DB_USERNAME, DB_PASSWORD (Supabase)
+- JWT_SECRET_KEY, JWT_EXPIRATION_TIME (Autenticación)
+- Prioridad: System env vars > .env (solo dev) > application.properties defaults
+- En producción: .env files NO se cargan (DotenvConfig.java)
+
+☸️ Kubernetes Ready:
+- Dockerfile optimizado y listo
+- Manifests de ejemplo creados
+- Gestión de secrets documentada
+- Health checks configurados
+- Resource limits definidos
 
 Explicaciones para entrevistas y posts en LinkedIn:
-"Dockericé con multi-stage build para optimizar imagenes: FROM builder copia artifacts. Compose maneja redes (app conecta a postgres via hostname). Para INNOQA: 'Resuelve mi gap en Docker – pros: portabilidad; contras: overhead, pero esencial para K8s'. #Docker #Containerization."
-Tiempo estimado: 5 horas.
-Hito: App en Docker, Compose running.
+"Dockericé con multi-stage build para optimizar imagenes: reducción 75% (800MB → 200MB). Variables de entorno son CRÍTICAS: prioridad env vars > .env (solo dev) > defaults. Preparado para K8s con health checks, secrets management y manifests. Para INNOQA: 'Resuelve mi gap en Docker – pros: portabilidad, escalabilidad; contras: overhead, pero esencial para cloud-native'. #Docker #Kubernetes #Containerization."
+
+📊 Tiempo real: 6 horas
+🎯 Nivel alcanzado: Senior (Docker + Kubernetes + Secrets Management)
+Hito: App dockerizada, lista para Kubernetes, documentación completa.
+
+
 Día 6: Orquestación Local (K3d/Minikube)
 Objetivos principales: Setup K3d (ligero), deploy app local.
 Pasos detallados:
