@@ -9,8 +9,8 @@ docker rm academia-app 2>$null
 docker run -d `
   --name academia-app `
   -p 8080:8080 `
-  -e DB_SUPABASE="jdbc:postgresql://db.wjbbuiiskercelchtaqg.supabase.co:6543/postgres?sslmode=require" `
-  -e DB_USERNAME="postgres" `
+  -e DB_SUPABASE="jdbc:postgresql://aws-1-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require" `
+  -e DB_USERNAME="postgres.wjbbuiiskercelchtaqg" `
   -e DB_PASSWORD="Ac4d3m1a_1994!" `
   -e JWT_SECRET_KEY="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970" `
   -e JWT_EXPIRATION_TIME="86400000" `
