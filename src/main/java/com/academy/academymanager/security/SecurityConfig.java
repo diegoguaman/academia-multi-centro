@@ -126,6 +126,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/graphql/**", "/graphiql/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()  // Permitir todos los endpoints de Actuator para health checks de K8s
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/profesor/**").hasAnyRole("PROFESOR", "ADMIN")
                         .requestMatchers("/api/alumno/**").hasAnyRole("ALUMNO", "ADMIN")

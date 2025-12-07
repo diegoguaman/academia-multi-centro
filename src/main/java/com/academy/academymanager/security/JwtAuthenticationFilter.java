@@ -61,6 +61,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull final HttpServletResponse response,
             @NonNull final FilterChain filterChain
     ) throws ServletException, IOException {
+        // Skip JWT processing for Actuator endpoints (used by K8s health checks)
+        final String requestPath = request.getRequestURI();
+        if (requestPath != null && requestPath.startsWith("/actuator")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
         if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
